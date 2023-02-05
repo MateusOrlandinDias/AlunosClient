@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AlunosApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlunosApi.Context
 {
@@ -8,5 +9,7 @@ namespace AlunosApi.Context
         {
 
         }
+
+        public DbSet<Aluno> Alunos { get; set; }
     }
 }
