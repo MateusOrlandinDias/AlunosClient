@@ -28,7 +28,11 @@ namespace AlunosApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            /*
+             * É importante criar o serviço de contexto de conexão com o banco de dados utilizando o comando
+             * options.UseSqlServer("STRINGCONNECTION")
+             * Nesse caso a string connection vem do arquivo appsettings.json
+             */
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));

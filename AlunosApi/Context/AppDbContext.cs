@@ -1,6 +1,9 @@
 ﻿using AlunosApi.Models;
 using Microsoft.EntityFrameworkCore;
 
+/*Para o context, seguir este exemplo de namespace, classe, constructor, DbSet
+ *e OnModelCreate (podendo modificar o que fica dentro do método).
+ */
 namespace AlunosApi.Context
 {
     public class AppDbContext : DbContext

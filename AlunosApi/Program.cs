@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+//Seguir este padão para Program.cs
 namespace AlunosApi
 {
     public class Program
