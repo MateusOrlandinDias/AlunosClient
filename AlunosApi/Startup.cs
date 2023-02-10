@@ -1,4 +1,5 @@
 using AlunosApi.Context;
+using AlunosApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,13 @@ namespace AlunosApi
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            /*
+             * É importante registrar o service concluido neste startup.cs
+             * 
+             * Nesta proxima linha de código eu estou pedindo que sempre que eu use o AlunoService, ele
+             * vai implementar a interface IAlunoService
+             */
+            services.AddScoped<IAlunoService, AlunosService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
