@@ -104,7 +104,7 @@ namespace AlunosApi.Services
              */
             try
             {
-                var aluno = await _context.Alunos.FindAsync();
+                var aluno = await _context.Alunos.FindAsync(id);
                 return aluno;
             }
             catch
