@@ -130,7 +130,7 @@ namespace AlunosApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Aluno>> Create( Aluno aluno)
+        public async Task<ActionResult> Create( Aluno aluno)
         {
             /*
          * Agora preciso definir um end point para criar um recurso, ou seja, o verbo http POST
@@ -155,6 +155,61 @@ namespace AlunosApi.Controllers
             {
                 //return BadRequest("Request inválido");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter alunos");
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Edit(int id, [FromBody] Aluno aluno)
+        {
+            /*
+             * Aqui foi pedido de entrada o id do aluno e no corpo do json deve entrar os dados do Aluno
+             * 
+             * No PUT posso retornar:
+             * 204 - Non Content
+             * 200 - Sucesso
+             * 
+             * No verbo PUT eu devo passar todos os dados, mesmo os que eu não for atualizar
+             * Já no verbo PATCH ou PAT algo assim, é possivel atualizar somente uma info
+             * 
+             * No código é feita uma conferencia para os dados de entrada falarem sobre o mesmo aluno
+             */
+            try
+            {
+                if(aluno.Id == id)
+                {
+                    await _alunoService.UpdateAluno(aluno);
+                    return Ok($"Aluno com id={id} foi atualizado com sucesso.");
+                }
+                else
+                {
+                    return BadRequest("Dados inconsistentes");
+                }
+            }
+            catch
+            {
+                return BadRequest("Request inválido");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                var aluno = await _alunoService.GetAluno(id);
+                if(aluno != null)
+                {
+                    await _alunoService.DeleteAluno(aluno);
+                    return Ok($"Aluno de id = {id} foi excluido com sucesso.");
+                }
+                else
+                {
+                    return BadRequest($"Aluno com id = {id} não encontrado");
+                }
+            }
+            catch
+            {
+                return BadRequest("Request inválido");
             }
         }
     }
