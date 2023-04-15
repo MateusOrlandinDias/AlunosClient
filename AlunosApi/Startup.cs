@@ -3,6 +3,7 @@ using AlunosApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +39,19 @@ namespace AlunosApi
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            /*
+             * Ao usar o entityDbContext, ele deve ter essa configuração abaixo (é padrão) 
+             * services.AddIdentity<IdentityUser, IdentityRole>() -> Puxa as configurações padrões de user 
+             * (Nome, passwork, twoFactoryAuth, etc...) e role
+             * .AddEntityFrameworkStores<AppDbContext>() -> Armazenar e recuperar informações de perfil de user
+             * .AddDefaultTokenProviders(); -> Não está diretamente ligado ao token JWT, 
+             * na verdade gera tokens para mudanças em perfis de user (redefinir senha, email, etc...)
+             */
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
             /*
              * É importante registrar o service concluido neste startup.cs
              * 
@@ -45,6 +59,7 @@ namespace AlunosApi
              * vai implementar a interface IAlunoService
              */
             services.AddScoped<IAlunoService, AlunosService>();
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
