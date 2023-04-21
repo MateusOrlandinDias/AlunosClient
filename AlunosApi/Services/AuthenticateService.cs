@@ -14,10 +14,14 @@ Aqui, a instância _signInManager é injetada no construtor do serviço Authenti
 Em resumo, _signInManager é uma variável de instância da classe AuthenticateService que contém uma instância de SignInManager<IdentityUser>, que é usada para gerenciar a autenticação de usuários em um aplicativo web.
          */
         private readonly SignInManager<IdentityUser> _signInManager;
+        /*O mesmo da linha anterior é feito para o register com o user manager, isso é INJETAR 
+         * junto com colocar no construtor*/
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthenticateService(SignInManager<IdentityUser> signInManager)
+        public AuthenticateService(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task<bool> Authenticate(string email, string password)
@@ -35,6 +39,23 @@ Em resumo, _signInManager é uma variável de instância da classe AuthenticateS
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<bool> RegisterUser(string email, string password)
+        {
+            var appUser = new IdentityUser
+            {
+                UserName = email,
+                Email = email
+            };
+
+            var result = await _userManager.CreateAsync(appUser, password);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(appUser, isPersistent: false);
+            }
+
+            return result.Succeeded;
         }
     }
 }
