@@ -9,7 +9,8 @@ namespace AlunosApi.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "A senha é obrigatória")]
-        [StringLength(20, MinimumLength = 10, ErrorMessage = "A senha deve ter entre {MinimumLength} e {MaximumLength} caracteres.")]
+        [StringLength(20, ErrorMessage = "A {0} deve ter no mínimo {2} e no máximo {1} " +
+            "caracteres.", MinimumLength = 10)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

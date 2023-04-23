@@ -1,8 +1,10 @@
-﻿namespace AlunosApi.ViewModels
+﻿using System;
+
+namespace AlunosApi.ViewModels
 {
     public class UserToken
     {
         public string Token { get; set; }
-        public string Expiration { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }
