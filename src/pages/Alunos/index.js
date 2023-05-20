@@ -17,7 +17,7 @@ export default function Alunos(){
             </header>
             <form>
                 <input type="text" placeholder='Nome' />
-                <button type='button' class='button'>
+                <button type='button' className='button'>
                     Filtrar aluno por nome (parcial)
                 </button>
             </form>
