@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 import logoCadastro from '../../assets/cadastro.png';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiXCircle, FiEdit, FiUserX } from 'react-icons/fi';
 import api from '../../services/api';
 
@@ -12,6 +12,8 @@ export default function Alunos() {
 
     const email = localStorage.getItem('email');
     const token = localStorage.getItem('token');
+
+    const history = useNavigate();
 
     const authorization = {
         headers: {
@@ -25,6 +27,17 @@ export default function Alunos() {
                 setAlunos(response.data);
             }, token)
     })
+
+    async function logout(){
+        try {
+            localStorage.clear();
+            localStorage.setItem('token','');
+            authorization.headers='';
+            history('/');
+        } catch (error) {
+            alert('Não foi possivel fazer o logout: '+error);
+        }
+    }
     
     return (
         <div className='aluno-container'>
@@ -32,7 +45,7 @@ export default function Alunos() {
                 <img src={logoCadastro} alt="Cadastro" />
                 <span>Bem-Vindo(a) <strong>{email}</strong>!</span>
                 <Link className='button' to="/aluno/novo/0">Novo Aluno</Link>
-                <button type="button">
+                <button onClick={logout} type="button">
                     <FiXCircle size={35} color="#17202a" />
                 </button>
             </header>
