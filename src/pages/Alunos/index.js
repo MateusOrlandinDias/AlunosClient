@@ -38,6 +38,14 @@ export default function Alunos() {
             alert('Não foi possivel fazer o logout: '+error);
         }
     }
+
+    async function editAluno(id){
+        try {
+            history(`/aluno/novo/${id}`);
+        } catch (error) {
+            alert('Não foi possível editar o aluno: '+error);
+        }
+    }
     
     return (
         <div className='aluno-container'>
@@ -59,10 +67,10 @@ export default function Alunos() {
             <ul>
                 {alunos.map(aluno => (
                     <li key={aluno.id}>
-                        <b>Nome:</b>{aluno.nome}<br /><br />
-                        <b>Email:</b>{aluno.email}<br /><br />
-                        <b>Idade:</b>{aluno.idade}<br /><br />
-                        <button type='button'>
+                        <b>Nome: </b>{aluno.nome}<br /><br />
+                        <b>Email: </b>{aluno.email}<br /><br />
+                        <b>Idade: </b>{aluno.idade}<br /><br />
+                        <button onClick={()=> editAluno(aluno.id)} type='button'>
                             <FiEdit size="25" color="17202a" />
                         </button>
                         <button type='button'>
