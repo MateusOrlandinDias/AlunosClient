@@ -6,8 +6,10 @@ import { FiXCircle, FiEdit, FiUserX } from 'react-icons/fi';
 import api from '../../services/api';
 
 export default function Alunos() {
+    //filtrar dados
+    const [searchInput, setSearchInput] = useState('');
+    const [filtro, setFiltro] = useState([]);
 
-    const [nome, setNome] = useState('');
     const [alunos, setAlunos] = useState([]);
 
     const email = localStorage.getItem('email');
@@ -21,6 +23,23 @@ export default function Alunos() {
         }
     }
 
+    useEffect(()=>{
+        if (searchInput !== '') {
+            console.log('a');
+            console.log(searchInput);
+            const dadosFiltrados = alunos.filter((item) => {
+                console.log(Object.values(item.nome))
+                return Object.values(item).join('').toLowerCase()
+                    .includes(searchInput.toLowerCase());
+            });
+            console.log(dadosFiltrados);
+            setFiltro(dadosFiltrados);
+        } else {
+            console.log('b');
+            setFiltro(alunos);
+        }
+    }, [searchInput])
+
     useEffect(() => {
         api.get('api/alunos', authorization)
             .then(response => {
@@ -28,25 +47,25 @@ export default function Alunos() {
             }, token)
     })
 
-    async function logout(){
+    async function logout() {
         try {
             localStorage.clear();
-            localStorage.setItem('token','');
-            authorization.headers='';
+            localStorage.setItem('token', '');
+            authorization.headers = '';
             history('/');
         } catch (error) {
-            alert('Não foi possivel fazer o logout: '+error);
+            alert('Não foi possivel fazer o logout: ' + error);
         }
     }
 
-    async function editAluno(id){
+    async function editAluno(id) {
         try {
             history(`/aluno/novo/${id}`);
         } catch (error) {
-            alert('Não foi possível editar o aluno: '+error);
+            alert('Não foi possível editar o aluno: ' + error);
         }
     }
-    
+
     return (
         <div className='aluno-container'>
             <header>
@@ -58,27 +77,44 @@ export default function Alunos() {
                 </button>
             </header>
             <form>
-                <input type="text" placeholder='Nome' />
-                <button type='button' className='button'>
-                    Filtrar aluno por nome (parcial)
-                </button>
+                <input type="text" placeholder='Filtrar por nome...'
+                    onChange={e=>setSearchInput(e.target.value)}
+                />
             </form>
             <h1>Relação de Alunos</h1>
-            <ul>
-                {alunos.map(aluno => (
-                    <li key={aluno.id}>
-                        <b>Nome: </b>{aluno.nome}<br /><br />
-                        <b>Email: </b>{aluno.email}<br /><br />
-                        <b>Idade: </b>{aluno.idade}<br /><br />
-                        <button onClick={()=> editAluno(aluno.id)} type='button'>
-                            <FiEdit size="25" color="17202a" />
-                        </button>
-                        <button type='button'>
-                            <FiUserX size="25" color="17202a" />
-                        </button>
-                    </li>
-                ))}
-            </ul>
+            {searchInput.length > 1 ? (
+                <ul>
+                    {filtro.map(aluno => (
+                        <li key={aluno.id}>
+                            <b>Nome: </b>{aluno.nome}<br /><br />
+                            <b>Email: </b>{aluno.email}<br /><br />
+                            <b>Idade: </b>{aluno.idade}<br /><br />
+                            <button onClick={() => editAluno(aluno.id)} type='button'>
+                                <FiEdit size="25" color="17202a" />
+                            </button>
+                            <button type='button'>
+                                <FiUserX size="25" color="17202a" />
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <ul>
+                    {alunos.map(aluno => (
+                        <li key={aluno.id}>
+                            <b>Nome: </b>{aluno.nome}<br /><br />
+                            <b>Email: </b>{aluno.email}<br /><br />
+                            <b>Idade: </b>{aluno.idade}<br /><br />
+                            <button onClick={() => editAluno(aluno.id)} type='button'>
+                                <FiEdit size="25" color="17202a" />
+                            </button>
+                            <button type='button'>
+                                <FiUserX size="25" color="17202a" />
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
