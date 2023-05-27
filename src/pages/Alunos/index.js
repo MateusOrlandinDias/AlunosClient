@@ -25,17 +25,12 @@ export default function Alunos() {
 
     useEffect(()=>{
         if (searchInput !== '') {
-            console.log('a');
-            console.log(searchInput);
             const dadosFiltrados = alunos.filter((item) => {
-                console.log(Object.values(item.nome))
-                return Object.values(item).join('').toLowerCase()
+                return Object.values(item.nome).join('').toLowerCase()
                     .includes(searchInput.toLowerCase());
             });
-            console.log(dadosFiltrados);
             setFiltro(dadosFiltrados);
         } else {
-            console.log('b');
             setFiltro(alunos);
         }
     }, [searchInput])
@@ -82,7 +77,7 @@ export default function Alunos() {
                 />
             </form>
             <h1>Relação de Alunos</h1>
-            {searchInput.length > 1 ? (
+            {searchInput.length >= 1 ? (
                 <ul>
                     {filtro.map(aluno => (
                         <li key={aluno.id}>
