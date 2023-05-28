@@ -9,8 +9,8 @@ export default function Alunos() {
     //filtrar dados
     const [searchInput, setSearchInput] = useState('');
     const [filtro, setFiltro] = useState([]);
-
     const [alunos, setAlunos] = useState([]);
+    const [updateData, setUpdateData] = useState(true);
 
     const email = localStorage.getItem('email');
     const token = localStorage.getItem('token');
@@ -40,7 +40,9 @@ export default function Alunos() {
             .then(response => {
                 setAlunos(response.data);
             }, token)
-    })
+
+        setUpdateData(false);
+    }, [updateData])
 
     async function logout() {
         try {
@@ -66,9 +68,11 @@ export default function Alunos() {
             if (window.confirm('Deseja deletar o aluno de id = ' + id + ' ?')) {
                 await api.delete(`api/alunos/${id}`, authorization);
                 searchInput !== '' ? setFiltro(filtro.filter(aluno => aluno.id !== id)) : setAlunos(alunos.filter(aluno => aluno.id !== id));
+                setUpdateData(true);
             }
         } catch (error) {
             alert('Não foi possível excluir o aluno: ' + error);
+            setUpdateData(true);
         }
     }
 

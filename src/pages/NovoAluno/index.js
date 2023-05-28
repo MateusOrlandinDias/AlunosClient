@@ -15,6 +15,7 @@ export default function NovoAluno() {
 
     const history = useNavigate();
     const { alunoId } = useParams();
+    const [idAluno] = useState(alunoId);
 
     const authorization = {
         headers: {
@@ -27,7 +28,7 @@ export default function NovoAluno() {
             return;
         else
             loadAluno();
-    }, alunoId);
+    }, [idAluno]);
 
     async function loadAluno() {
         try {
